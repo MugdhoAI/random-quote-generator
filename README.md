@@ -1,6 +1,6 @@
 # Random Quote Generator
 
-A simple command-line app that displays a random inspirational quote.
+A simple command line app that displays a random inspirational quote.
 
 ## Installation
 
@@ -18,7 +18,7 @@ Example:
 
 ```text
 "Keep moving forward."
-— Random Quote Generator
+Random Quote Generator
 ```
 
 ## Development
