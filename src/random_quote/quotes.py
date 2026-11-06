@@ -21,6 +21,12 @@ QUOTES = (
     Quote("Keep learning, keep building, and keep moving forward.", "Random Quote Generator"),
     Quote("Difficult work becomes manageable when you take it one step at a time.", "Random Quote Generator"),
     Quote("Consistency gives small actions the power to become big results.", "Random Quote Generator"),
+    Quote("Focus is a superpower in a world full of noise.", "Random Quote Generator"),
+    Quote("Done is better than perfect when you are still learning.", "Random Quote Generator"),
+    Quote("Your future self is built by what you repeat today.", "Random Quote Generator"),
+    Quote("Curiosity turns ordinary days into experiments.", "Random Quote Generator"),
+    Quote("Ship small, learn fast, and improve steadily.", "Random Quote Generator"),
+    Quote("Attention is the rarest resource you own, so spend it deliberately.", "Random Quote Generator"),
 )
 
 
