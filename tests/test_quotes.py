@@ -61,3 +61,11 @@ def test_cli_daily_prints_one_quote(monkeypatch, capsys):
     lines = capsys.readouterr().out.splitlines()
     assert len(lines) == 2
     assert lines[0].startswith('"')
+
+
+def test_cli_list_prints_every_quote(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["quote", "--list"])
+    assert main() == 0
+    lines = capsys.readouterr().out.splitlines()
+    assert len(lines) == len(QUOTES)
+    assert lines[0].startswith("1. ")

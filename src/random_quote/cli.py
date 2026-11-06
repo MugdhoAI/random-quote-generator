@@ -4,7 +4,7 @@ import argparse
 import random
 
 from . import __version__
-from .quotes import format_quote, get_daily_quote, get_random_quote
+from .quotes import QUOTES, format_quote, get_daily_quote, get_random_quote
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -12,6 +12,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="quote",
         description="Display a random inspirational quote.",
+    )
+    parser.add_argument(
+        "--list",
+        action="store_true",
+        help="List every quote in the collection.",
     )
     parser.add_argument(
         "--daily",
@@ -44,6 +49,10 @@ def main() -> int:
     args = parser.parse_args()
     if args.count < 1:
         parser.error("--count must be at least 1")
+    if args.list:
+        for index, quote in enumerate(QUOTES, start=1):
+            print(f'{index}. "{quote.text}" \u2014 {quote.author}')
+        return 0
     if args.daily:
         print(format_quote(get_daily_quote()))
         return 0
