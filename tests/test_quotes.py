@@ -1,7 +1,9 @@
+from datetime import date
 import random
+import sys
 
 from random_quote.cli import main
-from random_quote.quotes import QUOTES, Quote, format_quote, get_random_quote
+from random_quote.quotes import QUOTES, Quote, format_quote, get_daily_quote, get_random_quote
 
 
 def test_quote_collection_is_not_empty():
@@ -29,3 +31,9 @@ def test_cli_prints_a_quote(capsys):
     output = capsys.readouterr().out
     assert output.startswith('"')
     assert "— Random Quote Generator" in output
+
+
+def test_daily_quote_is_deterministic_for_a_date():
+    day = date(2026, 11, 7)
+    assert get_daily_quote(day) == get_daily_quote(day)
+    assert get_daily_quote(day) in QUOTES

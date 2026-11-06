@@ -1,6 +1,7 @@
 """Quote data and random selection helpers."""
 
 from dataclasses import dataclass
+from datetime import date
 import random
 
 
@@ -43,3 +44,13 @@ def get_random_quote(rng: random.Random | None = None) -> Quote:
 def format_quote(quote: Quote) -> str:
     """Format a quote for terminal output."""
     return f'"{quote.text}"\n— {quote.author}'
+
+
+def get_daily_quote(day: date | None = None) -> Quote:
+    """Return the quote of the day for a date.
+
+    The selection is deterministic: the same date always returns the same
+    quote, and the choice cycles through the whole collection.
+    """
+    chosen_day = day if day is not None else date.today()
+    return QUOTES[chosen_day.toordinal() % len(QUOTES)]
