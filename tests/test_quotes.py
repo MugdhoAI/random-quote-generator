@@ -44,3 +44,12 @@ def test_cli_count_prints_the_requested_number_of_quotes(monkeypatch, capsys):
     assert main() == 0
     output = capsys.readouterr().out
     assert sum(1 for line in output.splitlines() if line.startswith('"')) == 3
+
+
+def test_cli_seed_makes_output_reproducible(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["quote", "--seed", "5", "--count", "2"])
+    assert main() == 0
+    first = capsys.readouterr().out
+    assert main() == 0
+    second = capsys.readouterr().out
+    assert first == second

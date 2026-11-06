@@ -1,6 +1,7 @@
 """Command-line interface for the random quote generator."""
 
 import argparse
+import random
 
 from . import __version__
 from .quotes import format_quote, get_random_quote
@@ -11,6 +12,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="quote",
         description="Display a random inspirational quote.",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=None,
+        help="Seed for reproducible random selection.",
     )
     parser.add_argument(
         "--count",
@@ -32,8 +39,9 @@ def main() -> int:
     args = parser.parse_args()
     if args.count < 1:
         parser.error("--count must be at least 1")
+    rng = random.Random(args.seed) if args.seed is not None else None
     for _ in range(args.count):
-        print(format_quote(get_random_quote()))
+        print(format_quote(get_random_quote(rng)))
     return 0
 
 
