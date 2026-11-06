@@ -4,7 +4,7 @@ import argparse
 import random
 
 from . import __version__
-from .quotes import format_quote, get_random_quote
+from .quotes import format_quote, get_daily_quote, get_random_quote
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -12,6 +12,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="quote",
         description="Display a random inspirational quote.",
+    )
+    parser.add_argument(
+        "--daily",
+        action="store_true",
+        help="Print the quote of the day instead of a random quote.",
     )
     parser.add_argument(
         "--seed",
@@ -39,6 +44,9 @@ def main() -> int:
     args = parser.parse_args()
     if args.count < 1:
         parser.error("--count must be at least 1")
+    if args.daily:
+        print(format_quote(get_daily_quote()))
+        return 0
     rng = random.Random(args.seed) if args.seed is not None else None
     for _ in range(args.count):
         print(format_quote(get_random_quote(rng)))

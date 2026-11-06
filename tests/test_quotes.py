@@ -53,3 +53,11 @@ def test_cli_seed_makes_output_reproducible(monkeypatch, capsys):
     assert main() == 0
     second = capsys.readouterr().out
     assert first == second
+
+
+def test_cli_daily_prints_one_quote(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["quote", "--daily"])
+    assert main() == 0
+    lines = capsys.readouterr().out.splitlines()
+    assert len(lines) == 2
+    assert lines[0].startswith('"')
