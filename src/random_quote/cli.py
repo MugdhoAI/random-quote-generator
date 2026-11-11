@@ -4,7 +4,7 @@ import argparse
 import random
 
 from . import __version__
-from .quotes import QUOTES, format_quote, get_daily_quote, get_random_quote
+from .quotes import QUOTES, format_quote, get_daily_quote, get_random_quotes
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -57,8 +57,8 @@ def main() -> int:
         print(format_quote(get_daily_quote()))
         return 0
     rng = random.Random(args.seed) if args.seed is not None else None
-    for _ in range(args.count):
-        print(format_quote(get_random_quote(rng)))
+    for quote in get_random_quotes(args.count, rng):
+        print(format_quote(quote))
     return 0
 
 

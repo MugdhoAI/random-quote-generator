@@ -63,6 +63,32 @@ def test_cli_daily_prints_one_quote(monkeypatch, capsys):
     assert lines[0].startswith('"')
 
 
+def test_random_quotes_have_no_repeats_within_the_collection():
+    from random_quote.quotes import get_random_quotes
+
+    for seed in range(20):
+        selected = get_random_quotes(len(QUOTES), random.Random(seed))
+        assert len(selected) == len(QUOTES)
+        assert len(set(selected)) == len(QUOTES)
+
+
+def test_random_quotes_repeat_only_after_a_full_pass():
+    from random_quote.quotes import get_random_quotes
+
+    selected = get_random_quotes(len(QUOTES) + 3, random.Random(3))
+    assert len(selected) == len(QUOTES) + 3
+    assert len(set(selected[: len(QUOTES)])) == len(QUOTES)
+
+
+def test_cli_count_prints_distinct_quotes(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["quote", "--seed", "2", "--count", "5"])
+    assert main() == 0
+    output = capsys.readouterr().out
+    printed = [line for line in output.splitlines() if line.startswith('"')]
+    assert len(printed) == 5
+    assert len(set(printed)) == 5
+
+
 def test_cli_list_prints_every_quote(monkeypatch, capsys):
     monkeypatch.setattr(sys, "argv", ["quote", "--list"])
     assert main() == 0

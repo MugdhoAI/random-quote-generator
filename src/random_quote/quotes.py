@@ -41,6 +41,21 @@ def get_random_quote(rng: random.Random | None = None) -> Quote:
     return generator.choice(QUOTES)
 
 
+def get_random_quotes(count: int, rng: random.Random | None = None) -> list[Quote]:
+    """Return count quotes with no repeats until the collection runs out.
+
+    Quotes are drawn in shuffled passes through the collection, so asking
+    for several quotes never prints the same one twice until every quote
+    has appeared once.
+    """
+    generator = rng if rng is not None else random
+    selected: list[Quote] = []
+    while len(selected) < count:
+        take = min(count - len(selected), len(QUOTES))
+        selected.extend(generator.sample(QUOTES, take))
+    return selected
+
+
 def format_quote(quote: Quote) -> str:
     """Format a quote for terminal output."""
     return f'"{quote.text}"\n— {quote.author}'
