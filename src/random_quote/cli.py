@@ -32,7 +32,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--count",
         type=int,
-        default=1,
+        default=None,
         help="Number of quotes to print (default: 1).",
     )
     return parser
@@ -47,8 +47,16 @@ def main() -> int:
         version=__version__,
     )
     args = parser.parse_args()
-    if args.count < 1:
+    if args.count is not None and args.count < 1:
         parser.error("--count must be at least 1")
+    if args.list and args.daily:
+        parser.error("--list and --daily cannot be used together")
+    if args.list or args.daily:
+        mode = "--list" if args.list else "--daily"
+        if args.count is not None:
+            parser.error(f"--count cannot be used with {mode}")
+        if args.seed is not None:
+            parser.error(f"--seed cannot be used with {mode}")
     if args.list:
         for index, quote in enumerate(QUOTES, start=1):
             print(f'{index}. "{quote.text}" \u2014 {quote.author}')
@@ -57,7 +65,8 @@ def main() -> int:
         print(format_quote(get_daily_quote()))
         return 0
     rng = random.Random(args.seed) if args.seed is not None else None
-    for quote in get_random_quotes(args.count, rng):
+    count = args.count if args.count is not None else 1
+    for quote in get_random_quotes(count, rng):
         print(format_quote(quote))
     return 0
 

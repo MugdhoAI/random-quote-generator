@@ -2,6 +2,8 @@ from datetime import date
 import random
 import sys
 
+import pytest
+
 from random_quote.cli import main
 from random_quote.quotes import QUOTES, Quote, format_quote, get_daily_quote, get_random_quote
 
@@ -87,6 +89,23 @@ def test_cli_count_prints_distinct_quotes(monkeypatch, capsys):
     printed = [line for line in output.splitlines() if line.startswith('"')]
     assert len(printed) == 5
     assert len(set(printed)) == 5
+
+
+@pytest.mark.parametrize(
+    "argv",
+    [
+        ["quote", "--daily", "--count", "2"],
+        ["quote", "--daily", "--seed", "5"],
+        ["quote", "--list", "--count", "2"],
+        ["quote", "--list", "--seed", "5"],
+        ["quote", "--list", "--daily"],
+    ],
+)
+def test_cli_rejects_flags_that_would_be_ignored(monkeypatch, argv):
+    monkeypatch.setattr(sys, "argv", argv)
+    with pytest.raises(SystemExit) as excinfo:
+        main()
+    assert excinfo.value.code == 2
 
 
 def test_cli_list_prints_every_quote(monkeypatch, capsys):
